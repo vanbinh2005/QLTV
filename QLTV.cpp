@@ -3,6 +3,116 @@
 #include <stdlib.h> //quản lý bộ nhớ
 #include <string>   // Đọc string tốt hơn
 using namespace std;
+bool admin();
+int quanlythuvien();
+int quanlyusre();
+int xem_va_timkiem();
+
+int main()
+{
+    bool ad = false; // Chac chan rang khong cho user vao quyen adimn
+    system("cls");   // Xóa output
+    cout << "Xin Chao!!!";
+    while (true)
+    {
+        int kt;
+        cout << "\n( admin: 1; user: 2; end: 0 )\
+         \nBan la: ";
+        cin >> kt; // Dinh dang nguoi vao
+
+        if (kt == 0) // Kết thúc chương trình
+        {
+            system("cls");
+            cout << "Hen gap lai!!";
+            return 0;
+        }
+        else if (kt == 1) // Danh tính admin
+        {
+            system("cls");
+            ad = admin();
+            if (ad) // Đang nhập thành công
+            {
+                cout << "dang nhap thanh cong";
+                while (true)
+                {
+
+                    cout << "\nBan muon:\n\
+- kiem tra thu vien ( 1 ) \n\
+- chinh sua thu vien ( 2 ) \n\
+- quan ly usre ( 3 )\n\
+- ket thu ( 0 )\n";
+                    cin >> kt;
+
+                    if (kt == 0)
+                    {
+                        system("cls");
+                        cout<<"Ket thuc";
+                        return 0;
+                    }
+                    if (kt == 1) // Kiểm tra
+                    {
+                        system("cls");
+                        cout << "Kiem tra thu vien\n";
+                        kt = xem_va_timkiem();
+                        if (kt = 0)
+                        {
+                            system("cls");
+                            cout << "Tam biet!!";
+                            return 0;
+                        }
+                    }
+                    else if (kt == 2) // Chỉnh sửa thư viện
+                    {
+                        system("cls");
+                        cout << "Chinh sua thu vien\n";
+                        kt = quanlythuvien();
+                        if (kt = 0)
+                        {
+                            system("cls");
+                            cout << "Tam biet!!";
+                            return 0;
+                        }
+                    }
+                    else if (kt == 3) // Chỉnh sửa usre
+                    {
+                        system("cls");
+                        cout << "Quan ly usre\n";
+                        kt = quanlyusre();
+                        if (kt = 0)
+                        {
+                            continue;
+                        }
+                    }
+                    else // Lỗi và bắt đầu vòng lập mới
+                    {
+                        system("cls");
+                        cout << "Loi sai cu phap!! vui long nhap lai";
+                        continue;
+                    }
+                }
+            }
+            else
+            {
+                cout << "Ban da nhap sai nhieu lan\nTam biet!!";
+                return 0;
+            }
+        }
+        else if (kt == 2) // Danh tính người dùng
+        {
+            system("cls");
+            cout << "Xin chao quy khach";
+            break;
+        }
+        else // Input không hợp lệ
+        {
+            system("cls");
+            cout << "Khong hop le vui long nhap lai\n";
+            continue;
+        }
+    }
+
+    return 0;
+}
 
 bool admin()
 {
@@ -92,13 +202,17 @@ int quanlythuvien()
 int quanlyusre()
 {
     // lấy thông tin từ file usre
-    ifstream us("test.txt"); // Tạo đối tượng us mở và đọc file usre.txt
-    string A[9999], x;       // Tối đa bảy người quản lý được rồi, nhiều dễ bị tham nhũng :)))
+    ifstream us("user.txt"); // Tạo đối tượng us mở và đọc file usre.txt
+    string A[9999], x;       //
 
     int run = 0; // Biến chạy cho A
     // Đối tượng ad sẽ lần lượt đọc các dòng trog file - 1 vòng là 1 dòng
     while (getline(us, x)) // Nhập thông tin từ đối tượng us vào biến x va
     {
+        if (x == "") // gap dong khong chua gi
+        {
+            continue;
+        }
         A[run] = x; // đưa thông tin từ x vào A;
         run++;
     }
@@ -106,13 +220,13 @@ int quanlyusre()
     while (true)
     {
         system("cls");
-        cout << "Tim kiem ( 1 ): Xem tat ca ( 2 ) : Chinh sua danh sach den ( 3 ) : Ket thuc ( 0 ):\n";
+        cout << "Tim kiem ( 1 ): Xem tat ca ( 2 ) : Chinh sua danh sach den ( 3 ) : Quay ve ( 0 ):\n";
         int kt2;
         cin >> kt2;
         if (kt2 == 0)
         {
             system("cls");
-            cout << "Ket Thuc";
+            cout << "Quay ve";
             return 0;
         }
 
@@ -125,66 +239,27 @@ int quanlyusre()
                 string name;
                 cin >> name;
                 int dem = 0;
-                bool kt22 = false;
-                for (int _ = 0; _ <= run; _++)
+                bool kt22 = true;
+                for (int _ = 0; _ <= run; _++) // Vong tim
                 {
                     if (name == A[_])
                     {
-                        cout << "Da tim duoc: " << A[_] << "\n";
-                        while (true)
-                        {
-                            cout << "Ban muon tiep tuc tim kiem khong (Y/N): "; // Tiep tuc tim kiem hoac dung tim kiem
-                            char tiep;
-                            cin >> tiep;
-                            if (tiep == 'Y')
-                            {
-                                kt22 = true;
-                                break;
-                            }
-                            else if (tiep == 'N')
-                            {
-                                kt22 = false;
-                                break;
-                            }
-                            else
-                            {
-                                cout << "Loi !!";
-                                continue;
-                            }
-                        }
-
-                        break;
-                    }
-                    dem++;
-                    if (dem == run) // Khong tim duoc
-                    {
-                        cout << "Khong tim duoc\n";
-                        cout << "Ban muon tiep tuc tim kiem khong (Y/N):"; // Tiep tuc tim kiem hoac dung tim kiem
-                        char tiep;
-                        cin >> tiep;
-                        if (tiep == 'Y')
-                        {
-                            kt22 = true;
-                            break;
-                        }
-                        else if (tiep == 'N')
-                        {
-                            kt22 = false;
-                            break;
-                        }
-                        else
-                        {
-                            cout << "Loi !!";
-                            continue;
-                        }
+                        cout << "Da tim duoc: " << A[_] << "\n"; // Da tim duoc
+                        kt22 = false;
                     }
                 }
-
-                if (kt22) // Tiep tuc tim kiem
+                if (kt22) // Khong tim duoc
+                {
+                    cout << "Khong tim duoc\n";
+                }
+                cout << "Ban co muon tiep tuc khong ( Y/N ): "; // Tiep tuc hoac khong
+                char Yn;
+                cin >> Yn;
+                if (Yn == 'Y')
                 {
                     continue;
                 }
-                else // Ket thuc tim kiem
+                else
                 {
                     break;
                 }
@@ -287,7 +362,7 @@ int quanlyusre()
                         else // Ket thuc xoa user
                         {
                             ofstream myfile;
-                            myfile.open("test.txt");
+                            myfile.open("user.txt");
                             for (int i = 0; i < run; i++)
                             {
                                 if (A[i] == "")
@@ -306,72 +381,79 @@ int quanlyusre()
                 {
                     system("cls");
                     cout << "Them user vao danh sach den\n";
-                    while (true)
+                    bool dkwhile = true;
+                    while (dkwhile)
                     {
                         cout << "Nhap ten: ";
                         string ten;
                         cin >> ten;
-                        int dem = 0;
-                        bool kt33 = false;
+
+                        bool dk = false;
                         for (int _ = 0; _ <= run; _++) // Vong tim
                         {
                             if (ten == A[_])
                             {
-                                cout << "Da ton tai: " << A[_] << "\n";
+                                cout << "Da ton tai: " << A[_] << "\n"; // Da co
+                                dk = true;                              // kich hoat vong nhap ten moi
                                 break;
                             }
-                            else
+                            else // Them user vao danh sach moi
                             {
-                                kt33 = true;
-                            }
-                        }
-                        bool kt44 = false;
-                        if (kt33)
-                        {
-                            for (int _ = 0; _ < 9999; _++)
-                            {
-                                if (A[_] == "")
+                                cout << "Xac nhan them [ " << ten << " ] moi vao danh sach den ( Y/N ): ";
+                                char Yn;
+                                cin >> Yn;
+                                if (Yn == 'N')
                                 {
-                                    A[_] = ten;
-                                    cout << "Da them " << A[_] << " vao danh sach den\n";
-                                    cout << "Ban muon tiep khong (Y/N):"; // Tiep tuc tim kiem hoac dung tim kiem
-                                    char tiep;
-                                    cin >> tiep;
-                                    if (tiep == 'Y')
-                                    {
-                                        break;
-                                    }
-                                    else if (tiep == 'N')
-                                    {
-                                        kt44 = true;
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        cout << "Loi !!";
-                                        continue;
-                                    }
+                                    dk = true;
                                     break;
                                 }
-                            }
-                            if (kt44)
-                            {
-                                ofstream myfile;
-                                myfile.open("test.txt");
-                                for (int i = 0; i < 9999; i++)
+                                if (Yn == 'Y')
                                 {
-                                    if (A[i] == "")
+                                    for (size_t i = 0; i < 9999; i++)
                                     {
-                                        break;
+                                        if (A[i] == "")
+                                        {
+                                            A[i] = ten;
+                                            break;
+                                        }
                                     }
-                                    myfile << A[i] << "\n";
+                                    cout << "Da luu " << ten << " danh sach den\n";
+                                    dk = false;
                                 }
-                                myfile.close();
-                                cout << "Ket thuc";
-                                return 0;
+                            }
+                        }
+                        if (dk) // chay vong nhap ten moi
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            cout << "Ban co muon tiep tuc khong (Y/N): ";
+                            char Yn;
+                            cin >> Yn;
+                            if (Yn == 'Y')
+                            {
+                                continue;
+                            }
+                            else if (Yn =='N')
+                            {
+                                dkwhile = false;
                             }
                         }
                     }
+                    ofstream myfile;
+                    myfile.open("user.txt");
+                    for (int i = 0; i < 9999; i++)
+                    {
+                        if (A[i] == "")
+                        {
+                            break;
+                        }
+                        myfile << A[i] << "\n";
+                    }
+                    myfile.close();
+                    system("cls");
+                    return 0;
                 }
             }
         }
@@ -492,108 +574,5 @@ int xem_va_timkiem()
         }
         cout << A[_][0] << " | " << A[_][1] << " | " << A[_][2] << " | " << A[_][3] << " | " << A[_][4] << " | " << A[_][5] << " | " << A[_][6] << " | " << A[_][7] << "\n";
     }
-    return 0;
-}
-
-int main()
-{
-    bool ad = false;
-    system("cls"); // Xóa output
-    cout << "Xin Chao!!!";
-    while (true)
-    {
-
-        int kt;
-        cout << "\n( admin: 1; user: 2; end: 0 )\
-         \nBan la: ";
-        cin >> kt;
-
-        if (kt == 0) // Kết thúc chương trình
-        {
-            system("cls");
-            cout << "Hen gap lai!!";
-            return 0;
-        }
-        else if (kt == 1) // Danh tính admin
-        {
-            system("cls");
-            ad = admin();
-            if (ad) // Đang nhập thành công
-            {
-                cout << "dang nhap thanh cong";
-                int kt = 99999999;
-                while (true)
-                {
-                    if (kt == 99999999)
-                    {
-                        cout << "Ban muon kiem tra thu vien ( 1 ) \n\
-                    : chinh sua thu vien ( 2 ) \n\
-                    : quan ly usre ( 3 ): ";
-                        cin >> kt;
-                    }
-                    if (kt == 1) // Kiểm tra
-                    {
-                        system("cls");
-                        cout << "Kiem tra thu vien\n";
-                        kt = xem_va_timkiem();
-                        if (kt = 0)
-                        {
-                            system("cls");
-                            cout << "Tam biet!!";
-                            return 0;
-                        }
-                    }
-                    else if (kt == 2) // Chỉnh sửa thư viện
-                    {
-                        system("cls");
-                        cout << "Chinh sua thu vien\n";
-                        kt = quanlythuvien();
-                        if (kt = 0)
-                        {
-                            system("cls");
-                            cout << "Tam biet!!";
-                            return 0;
-                        }
-                    }
-                    else if (kt == 3) // Chỉnh sửa usre
-                    {
-                        system("cls");
-                        cout << "Quan ly usre\n";
-                        kt = quanlyusre();
-                        if (kt = 0)
-                        {
-                            system("cls");
-                            cout << "Tam biet!!";
-                            return 0;
-                        }
-                    }
-                    else // Lỗi và bắt đầu vòng lập mới
-                    {
-                        system("cls");
-                        cout << "Loi sai cu phap!! vui long nhap lai";
-                        continue;
-                    }
-                }
-            }
-            else
-            {
-                cout << "Ban da nhap sai nhieu lan\nTam biet!!";
-                return 0;
-            }
-        }
-        else if (kt == 2) // Danh tính người dùng
-        {
-            system("cls");
-            cout << "Xin chao quy khach";
-            break;
-        }
-        else // Input không hợp lệ
-        {
-            system("cls");
-            cout << "Khong hop le vui long nhap lai\n";
-            continue;
-        }
-    }
-
     return 0;
 }
